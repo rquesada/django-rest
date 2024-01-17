@@ -10,3 +10,5 @@ python manage.py migrate
 # Run Server
 python manage.py runserver
 
+# Create Superuser
+python manage.py createsuperuser 
