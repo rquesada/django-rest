@@ -8,6 +8,7 @@ from watchlist_app.api.serializers import WatchListSerializer, StreamPlataformSe
 class StreamPlatformAV(APIView):
     def get(self, request):
         plataforms = StreamPlataform.objects.all()
+        # serializer = StreamPlataformSerializer(plataforms, many=True, context={'request': request})
         serializer = StreamPlataformSerializer(plataforms, many=True)
         return Response(serializer.data)
     
@@ -18,6 +19,29 @@ class StreamPlatformAV(APIView):
             return Response(serializer.data)
         else:
             return Response(serializer.errors)
+
+class StreamPlatformDetailAV(APIView):
+    def get(self, request, pk):
+        try:
+            plataform = StreamPlataform.objects.get(pk=pk)
+        except StreamPlataform.DoesNotExist:
+            return Response({"Error": "Not found"}, status=status.HTTP_404_NOT_FOUND)
+        serializer = StreamPlataformSerializer(plataform)
+        return Response(serializer.data)
+    
+    def put(self, request, pk):
+        plataform = StreamPlataform.objects.get(pk=pk)
+        serializer = StreamPlataformSerializer(plataform, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, pk):
+        plataform = StreamPlataform.objects.get(pk=pk)
+        plataform.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 class WatchListAV(APIView):
     def get(self, request):

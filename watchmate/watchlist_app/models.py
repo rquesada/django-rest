@@ -17,6 +17,7 @@ This class could be Podcast, Movie, or Series, depending on the type of content
 class WatchList(models.Model):
     title = models.CharField(max_length=50)
     storyline = models.CharField(max_length=200)
+    platform = models.ForeignKey(StreamPlataform, on_delete=models.CASCADE, related_name="watchlist")
     activate = models.BooleanField(default=True)
     created = models.DateTimeField(auto_now_add=True)
     
